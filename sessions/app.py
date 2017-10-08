@@ -1,4 +1,4 @@
-from flask import Flask, request, session, redirect, url_for
+from flask import Flask, request, session, redirect, url_for, render_template
 import os
 
 app = Flask (__name__)
@@ -14,8 +14,8 @@ def hello_world():
     Otherwise, the login page is displayed
     '''
     if "username" in session.keys():
-        return redirect(url_for("loggedin.html", name = session["username"]))
-    return redirect(url_for("login.html", message = ""))
+        return render_template("loggedin.html", name = session["username"])
+    return render_template("login.html", message = "")
 
 
 @app.route("/loggedin")
@@ -27,16 +27,17 @@ def logged_in():
    if input_name == the_username:
       if input_pass == the_password:
          session["username"] = input_name #Creates a new session
-         return redirect(url_for("loggedin.html", name = input_name))
+         return render_template("loggedin.html", name = input_name)
       else:
-         return redirect(url_for("login.html", message = "Error: Wrong password"))
+         return render_template("login.html", message = "Error: Wrong password")
    else:
-      return redirect(url_for("login.html", message =  "Error: Wrong username"))
+      return render_template("login.html", message =  "Error: Wrong username")
 
 @app.route("/logout")
 def logged_out():
     session.pop("username") #Ends session
-    return redirect("/") #Redirecting to login
+    #Alternatively, redirect("/")
+    return redirect(url_for("hello_world")) #Redirecting to login
 
 if __name__ == '__main__':
     app.debug = True
