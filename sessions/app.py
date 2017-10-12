@@ -13,7 +13,7 @@ def hello_world():
     If session has a record of the correct username and password input, the user is logged in
     Otherwise, the login page is displayed
     '''
-    if "username" in session.keys():
+    if "username" in session:
         return render_template("loggedin.html", name = session["username"])
     return render_template("login.html", message = "")
 

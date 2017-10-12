@@ -4,6 +4,12 @@
     </head>
     <body>
         <form action="greet" method="POST">
+            {% set msgs = get_flashed_messages() %}
+            {% for msg in msgs %}
+                {{msg}}
+            </font>
+            {% endfor %}
+            <br>
             Username: <input type="text" name="username">
             <br>
             Password: <input type="password" name="password">
