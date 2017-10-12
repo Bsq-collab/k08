@@ -14,12 +14,13 @@ def hello_world():
     checks user info and displays greet or login
     returns html page greet or login
     '''
+    
     print("\n\n")
-    print("Cookie username: ", session.get('username'))
-    print("Cookie password: ",session.get('password'))
+    print("Session username: ", session.get('username'))
+    print("Session password: ",session.get('password'))
+    print("\n\n")
+    
     if session.get('username') == username and session.get('password') == password:
-       # print url_for('greet')
-        #return redirect(url_for("greet", user= session.get("username")))
         return render_template('greet.html',user=session.get('username'))
     else:
         return render_template("login.html")
@@ -28,28 +29,31 @@ def hello_world():
 def greet():
     '''
     sets user info keys
-    returns greet or error html pages
+    redirects to root route or flashes error message
     '''
+    usr= request.form.get('username')
+    pwd= request.form.get('password')
     print("\n\n")
-    print("Form username: ", request.form.get('username'))
-    print("Form password: ", request.form.get('password'))
-    session['username'] = request.form.get('username')
-    session['password'] = request.form.get('password')
+    print("Form username: ", usr)
+    print("Form password: ", pwd)
+    print("\n\n")
+    
+    session['username'] = usr
+    session['password'] = pwd
+
     if session.get('username')== username and session.get('password')==password:
         return render_template( 'greet.html', user = session.get('username') )
     elif session.get('username') != username:
         flash("USERNAME INCORRECT!")
-        #return render_template('error.html', error = "Username incorrect!")
     else:
         flash("PASSWORD INCORRECT!")
-        #return render_template('error.html', error = "Password incorrect!")
     return redirect(url_for("hello_world"))
 
 @app.route("/logout",methods=['POST','GET'])
 def logout():
     '''
     clears cookies
-    returns login html page
+    redirects to root route
     '''
     session.pop("username")
     session.pop("password")
